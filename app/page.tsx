@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      <h1>Let Us Get Started!</h1>
+      <h1>Welcome to DevHub!</h1>
     </div>
   );
 }
