@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import LightRays from "@/components/LightRays";
 import Navbar from "@/components/Navbar";
+import { emitPostHogLog } from "@/instrumentation";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -24,6 +25,11 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  emitPostHogLog("site shell rendered", {
+    event: "site_shell_rendered",
+    page_type: "home",
+  });
+
   return (
     <html
       lang="en"
