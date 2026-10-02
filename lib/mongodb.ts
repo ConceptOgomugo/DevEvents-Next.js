@@ -31,9 +31,14 @@ if (!cached) {
 }
 
 async function connectToDatabase(): Promise<Mongoose> {
-  // If a connection already exists, return the cached connection
+  // Reuse only an active connection; discard stale cache entries so they can reconnect.
   if (cached.conn) {
-    return cached.conn;
+    if (cached.conn.connection.readyState === 1) {
+      return cached.conn;
+    }
+
+    cached.conn = null;
+    cached.promise = null;
   }
 
   // If no connection attempt is in progress, create a new promise
