@@ -1,8 +1,16 @@
+import { after } from "next/server";
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import { events } from "@/lib/constants";
+import { emitPostHogLog, flushPostHogLogs } from "@/instrumentation";
 
 export default function Home() {
+  emitPostHogLog("featured events rendered", {
+    event: "featured_events_rendered",
+    event_count: events.length,
+  });
+  after(flushPostHogLogs);
+
   return (
     <section className="max-w-7xl mx-auto px-4 py-12">
       {/* Hero Section */}
