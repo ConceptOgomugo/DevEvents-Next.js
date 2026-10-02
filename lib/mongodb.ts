@@ -23,7 +23,8 @@ declare global {
 
 // In Next.js development mode, hot-reloading causes modules to reload,
 // creating multiple connections. We cache the connection in global space to persist it.
-let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
+let cached: MongooseCache =
+  global.mongoose ?? (global.mongoose = { conn: null, promise: null });
 
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
