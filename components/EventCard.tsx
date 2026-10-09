@@ -14,8 +14,8 @@ interface Props {
   image: string;
   slug: string;
   location: string;
-  Date: string;
-  Time: string;
+  date: string;
+  time: string;
 }
 
 export default function EventCard({
@@ -23,8 +23,8 @@ export default function EventCard({
   image,
   slug,
   location,
-  Date,
-  Time,
+  date,
+  time,
 }: Props) {
   const handleEventSelection = () => {
     if (isPostHogConfigured) {
@@ -34,7 +34,7 @@ export default function EventCard({
 
   return (
     <div>
-      <Link href={`/events/${slug}`} id="event-card" onClick={handleEventSelection}>
+      <Link href={`/event/${slug}`} id="event-card" onClick={handleEventSelection}>
         <Image
           src={image}
           alt={title}
@@ -53,11 +53,11 @@ export default function EventCard({
         <div className="datetime">
           <div>
             <Image src="/icons/calendar.svg" alt="calendar" width="14" height="14" />
-            <p>{Date}</p>
+            <p>{date}</p>
           </div>
           <div>
             <Image src="/icons/clock.svg" alt="clock" width="14" height="14" />
-            <p>{Time}</p>
+            <p>{time}</p>
           </div>
         </div>
       </Link>
