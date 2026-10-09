@@ -102,7 +102,7 @@ export default async function eventDetails({
                         <p className="text-sm">Be the first to join!</p>
                     )}
 
-                    <BookEvent />
+                    <BookEvent eventId={event._id} slug={event.slug} />
                 </div>
             </aside>
         </div>
