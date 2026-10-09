@@ -1,10 +1,18 @@
 import { after } from "next/server";
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { events } from "@/lib/constants";
 import { emitPostHogLog, flushPostHogLogs } from "@/instrumentation";
+import { IEvent } from "@/database";
+import { cacheLife } from "next/cache";
 
-export default function Home() {
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+export default async function Home() {
+  'use cache';
+  cacheLife('hours');
+  const response = await fetch(`${BASE_URL}/api/events`);
+  const {events } = await response.json();
+
   emitPostHogLog("featured events rendered", {
     event: "featured_events_rendered",
     event_count: events.length,
@@ -32,8 +40,10 @@ export default function Home() {
         <h3 className="text-2xl font-bold text-center">Featured Events</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event) => (
-            <EventCard key={event.slug} {...event} />
+          {events && events.length > 0 && events.map((event: IEvent) => (
+            <li key={event.slug} className="list-none">
+              <EventCard  {...event} />
+            </li>
           ))}
         </div>
       </div>
