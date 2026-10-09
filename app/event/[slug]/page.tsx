@@ -81,7 +81,7 @@ export default async function eventDetails({
                     <EventDetailsItem icon="/icons/audience.svg" alt="audience" label={event.audience} />
                 </section>
 
-                <EventAgenda agendaItems={JSON.parse(event.agenda[0])}/>
+                <EventAgenda agendaItems={event.agenda}/>
 
                 <section className="flex-col-gap-2">
                     <h2>About The Organizer</h2>
