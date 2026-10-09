@@ -2,6 +2,8 @@ import connectToDatabase from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import Event from "@/database/event.model";
 
+export const dynamic = "force-dynamic";
+
 // Define the expected context structure for Next.js App Router dynamic routes
 interface RouteParams {
   params: Promise<{
