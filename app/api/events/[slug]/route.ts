@@ -14,8 +14,7 @@ export async function GET(
   { params }: RouteParams
 ) {
   try {
-    await connectToDatabase();
-    // 1. Await dynamic route parameters (Next.js 15+ requirement)
+    // 1. Await dynamic route parameters (Next.js App Router requirement)
     const { slug } = await params;
 
     // 2. Validate route parameter
@@ -28,6 +27,9 @@ export async function GET(
 
     const sanitizedSlug = slug.trim().toLowerCase();
 
+    // 3. Connect to database
+    await connectToDatabase();
+
     // 4. Query event by slug
     const event = await Event.findOne({ slug: sanitizedSlug }).lean();
 
@@ -39,9 +41,12 @@ export async function GET(
       );
     }
 
-    // 6. Return successful response
+    // 6. Return successful response with clean JSON serialization
     return NextResponse.json(
-      { message: "Event retrieved successfully", event },
+      { 
+        message: "Event retrieved successfully", 
+        event: JSON.parse(JSON.stringify(event)) 
+      },
       { status: 200 }
     );
   } catch (e) {

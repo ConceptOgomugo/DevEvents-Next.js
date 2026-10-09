@@ -4,14 +4,15 @@ import ExploreBtn from "@/components/ExploreBtn";
 import { emitPostHogLog, flushPostHogLogs } from "@/instrumentation";
 import { IEvent } from "@/database";
 import { cacheLife } from "next/cache";
+import { events } from "@/lib/constants";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default async function Home() {
   'use cache';
   cacheLife('hours');
-  const response = await fetch(`${BASE_URL}/api/events`);
-  const {events } = await response.json();
+  // const response = await fetch(`${BASE_URL}/api/events`);
+  // const {events } = await response.json();
 
   emitPostHogLog("featured events rendered", {
     event: "featured_events_rendered",
