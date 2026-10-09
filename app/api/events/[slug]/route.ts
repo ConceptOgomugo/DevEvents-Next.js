@@ -2,6 +2,10 @@ import connectToDatabase from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import Event from "@/database/event.model";
 
+// Explicitly opt out of static prerendering and caching for this dynamic API route
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Define the expected context structure for Next.js App Router dynamic routes
 interface RouteParams {
   params: Promise<{
@@ -14,10 +18,10 @@ export async function GET(
   { params }: RouteParams
 ) {
   try {
-    // 1. Await dynamic route parameters (Next.js App Router requirement)
+    // 1. Await dynamic route parameters (Next.js 15+ requirement)
     const { slug } = await params;
 
-    // 2. Validate route parameter
+    // 2. Validate route parameter before making any DB connection
     if (!slug || typeof slug !== "string" || !slug.trim()) {
       return NextResponse.json(
         { message: "Slug parameter is required" },
@@ -30,7 +34,7 @@ export async function GET(
     // 3. Connect to database
     await connectToDatabase();
 
-    // 4. Query event by slug
+    // 4. Query event by slug using lean() for lighter payload
     const event = await Event.findOne({ slug: sanitizedSlug }).lean();
 
     // 5. Handle non-existent resource
@@ -41,7 +45,7 @@ export async function GET(
       );
     }
 
-    // 6. Return successful response with clean JSON serialization
+    // 6. Return response with safe serialization for ObjectIds and Dates
     return NextResponse.json(
       { 
         message: "Event retrieved successfully", 
