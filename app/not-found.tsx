@@ -1,6 +1,6 @@
+// app/not-found.tsx
 import Link from "next/link";
 
-// Force dynamic rendering so PostHog/telemetry doesn't execute during static build
 export const dynamic = "force-dynamic";
 
 export default function NotFound() {
